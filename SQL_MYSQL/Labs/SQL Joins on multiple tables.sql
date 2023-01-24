@@ -5,21 +5,21 @@ from store
 join address using (address_id)
 join city using (city_id)
 join country using (country_id);
-
+select * from film;
 #2 Write a query to display how much business, in dollars, each store brought in.
 
 select store.store_id, sum(payment.amount)
 from store
-join staff on store.store_id = staff.store_id
-join payment on staff.staff_id = payment.staff_id
+join staff using (store_id) 
+join payment using (staff_id)
 group by payment.staff_id;
 
 #3 What is the average running time(length) of films by category?
 select * from film;
 select category.name, avg(film.length) as runningtime
 from category
-join film_category on category.category_id = film_category.category_id
-join film on film_category.film_id = film.film_id
+join film_category using (category_id)
+join film using (film_id)
 group by category.name;
 
 #4 Which film categories are longest(length) (find Top 5)? (Hint: You can rely on question 3 output.)
@@ -28,8 +28,8 @@ group by category.name;
 select * from film;
 select category.name, avg(film.length) as runningtime
 from category
-join film_category on category.category_id = film_category.category_id
-join film on film_category.film_id = film.film_id
+join film_category using (category_id)
+join film using (film_id)
 group by category.name
 order by runningtime desc
 limit 5;
@@ -38,8 +38,8 @@ limit 5;
 
 select film.title, count(rental.inventory_id) as rentals
 from film
-join inventory on film.film_id = inventory.film_id
-join rental on inventory.inventory_id = rental.inventory_id
+join inventory using (film_id)
+join rental using (inventory_id)
 group by rental.inventory_id
 order by rentals desc
 limit 5;
@@ -49,11 +49,11 @@ limit 5;
 select * from film;
 select category.name, sum(payment.amount) as total
 from category
-join film_category on category.category_id = film_category.category_id
-join film on film_category.film_id = film.film_id
-join inventory on film.film_id = inventory.film_id
-join rental on inventory.inventory_id = rental.inventory_id
-join payment on rental.rental_id = payment.rental_id
+join film_category using (category_id)
+join film using (film_id)
+join inventory using (film_id)
+join rental using (inventory_id)
+join payment using (rental_id)
 group by category.name
 order by total desc
 limit 5;
@@ -62,7 +62,7 @@ limit 5;
 
 select film.title, inventory.store_id
 from film
-join inventory on film.film_id = inventory.film_id
+join inventory using (film_id)
 where film.title = 'Academy Dinosaur' and store_id = 1;
 
 SELECT title, count(film_id) FROM film
