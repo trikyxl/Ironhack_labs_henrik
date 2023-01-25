@@ -79,4 +79,4 @@ from (select customer_id, sum(amount) as total_spent
 from payment
 group by customer_id)
 as average_spent)
-order by first_name;
+order by total_spent desc;
